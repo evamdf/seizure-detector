@@ -1,6 +1,6 @@
 import numpy as np
 
-def sliding_windows(signal, window_size, step_size):
+def get_windows(signal, window_size, step_size):
     """
     Generates numpy array of sliding windows (shape (window_size,)) from 1D signal 
     """
@@ -11,12 +11,12 @@ def sliding_windows(signal, window_size, step_size):
         start += step_size
 
 
-def windows_from_segment(segment, window_size, step_size):
+def segment_windows(segment, window_size, step_size):
     """
     Breaks a segment into windows and pairs each window with the segment's label.
     Returns list of (window, label) tuples.
     """
     windows = []
-    for window in sliding_windows(segment["signal"], window_size, step_size):
+    for window in get_windows(segment["signal"], window_size, step_size):
         windows.append((window, segment["label"]))
     return windows
