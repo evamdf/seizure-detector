@@ -1,4 +1,4 @@
-SIMULATED_SPEED = 10.0          # How many times faster than real-time to simulate
+SIMULATED_SPEED = 5.0  # How many times faster than real-time to simulate
 
 WINDOW_SIZE = 173   # ~1 second at 173.61 Hz
 STEP_SIZE   = 87    # 50% overlap 
@@ -9,16 +9,18 @@ DATA_DIR = "../data/raw/"
 
 MODEL_PATH = "model.pkl"
 
+MIDI_OUTPUT_DIR = "midi-output"
+
 ALERT_THRESHOLD = 6 # Alert seizure after this many consecutive windows predicted as seizure (6 is 3 seconds)
 
 TEST_SIZE = 0.2  # proportion of segments to use as test set
 
 SET_LABELS = {
-    "F": 0,  # healthy, eyes open
-    "N": 0,  # healthy, eyes closed
-    "O": 0,  # interictal (between seizures)
-    "S": 1,  # interictal (between seizures)
-    "Z": 0,  # ictal (seizure)
+    "F": 0,  
+    "N": 0,  
+    "O": 0,  
+    "S": 1,  
+    "Z": 0,  
 }
 
 BANDS = {

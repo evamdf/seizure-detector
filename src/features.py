@@ -10,10 +10,9 @@ FEATURE_NAMES = [f"{b}_power_norm" for b in BAND_NAMES] + ["entropy", "rms"]  # 
 
 def extract_features(window: np.ndarray) -> np.ndarray:
     """
-    Extract a flat feature vector from a single EEG window.
+    Extract a feature vector from a single EEG window.
 
-    Features (7): normalised band powers (delta, theta, alpha, beta, gamma),
-                  spectral entropy, RMS amplitude.
+    Features are: normalised band powers (delta, theta, alpha, beta, gamma), spectral entropy, RMS amplitude.
     """
     # Use Welch's method to estimate the power spectral density 
     freqs, psd = welch(window, fs=SAMPLING_RATE, nperseg=min(len(window), 128))
