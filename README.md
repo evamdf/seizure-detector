@@ -24,6 +24,7 @@ source venv/bin/activate && pip install -r requirements.txt
 - Finish this documentation.....
 - Add arg for declaring a variable command line 
 - Add instructions on how to play the MIDI files (and maybe a little demo/screen recording with noise?)
+- Probs a nice restructure
 
 
 
