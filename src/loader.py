@@ -1,3 +1,8 @@
+"""
+- Loads EEG segments from the data directory, adding them to a dataset with their labels and set names.
+- Then splits the dataset into train/test sets, preserving the proportion of segments from each set in both splits.
+"""
+
 import numpy as np 
 from pathlib import Path 
 from sklearn.model_selection import StratifiedShuffleSplit
@@ -5,7 +10,9 @@ from sklearn.model_selection import StratifiedShuffleSplit
 from variables import DATA_DIR, TEST_SIZE, SET_LABELS
 
 def load_segment(filepath):
-    """Load a single .txt EEG segment"""
+    """
+    Load a single .txt EEG segment
+    """
     samples = []
     with open(filepath, "r") as f:
         for line in f:
@@ -16,8 +23,11 @@ def load_segment(filepath):
                 continue
     return np.array(samples)
 
+
 def split_segments(dataset):
-    """Split segments into train/test, preserving set proportions"""
+    """
+    Split segments into train/test, preserving set proportions
+    """
     segments = np.array(dataset)
     set_names = np.array([s["set_name"] for s in dataset])
 
@@ -26,10 +36,10 @@ def split_segments(dataset):
     return segments[train_idx].tolist(), segments[test_idx].tolist()
 
 
-def load_dataset():
+def loader():
     """
-    Load all segments from all sets, then split into train/test sets.
-    Returns a list of dicts: {signal, label, set_name, segment_id}
+    Load all segments from all sets into a list of dicts: {signal, label, set_name, segment_id}
+    Then split into train/test sets, preserving the proportion of segments from each set in both splits.
     """
     data_dir = Path(DATA_DIR)
     dataset = []

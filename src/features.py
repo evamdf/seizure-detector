@@ -1,3 +1,12 @@
+"""
+Extracts features from EEG windows
+- Returns a vector representing key characteristics of the EEG signal in a window.
+    - Uses Welch's method to estimate the power spectral density
+    - Uses the defined frequency bands to get normalised (relative) band powers
+    - Calculates RMS amplitude
+    - Returns a total of 7 features: 5 normalised band powers, spectral entropy, and RMS amplitude.
+"""
+
 import numpy as np
 from scipy.signal import welch
 from scipy.stats import entropy as scipy_entropy
@@ -8,10 +17,9 @@ BAND_NAMES = list(BANDS.keys())
 FEATURE_NAMES = [f"{b}_power_norm" for b in BAND_NAMES] + ["entropy", "rms"]  # 7 features
 
 
-def extract_features(window: np.ndarray) -> np.ndarray:
+def features(window: np.ndarray) -> np.ndarray:
     """
     Extract a feature vector from a single EEG window.
-
     Features are: normalised band powers (delta, theta, alpha, beta, gamma), spectral entropy, RMS amplitude.
     """
     # Use Welch's method to estimate the power spectral density 

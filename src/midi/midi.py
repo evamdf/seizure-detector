@@ -1,14 +1,21 @@
+"""
+This module generates MIDI files based on the extracted EEG features. 
+- It maps the features to musical parameters such as tempo, scale, root note, and rhythmic complexity, then creates short melodies that reflect the underlying brain activity patterns.
+"""
+
 import random
 from pathlib import Path
 from midiutil import MIDIFile
 
-from features import extract_features
+from features import features
 from variables import SET_LABELS, MIDI_OUTPUT_DIR
 
 SET_NAMES = list(SET_LABELS.keys())
 
 def generate_midi_vectors(segments):
-
+    """
+    Generate MIDI feature vectors for each class based on the first segment seen for that class.
+    """
     # Get the first segment seen for each class (we don't know what name the first files are because they have been split into training and test sets)
     first_segments = {}
     for seg in segments:
@@ -23,9 +30,9 @@ def generate_midi_vectors(segments):
     midi_vectors = {}
 
     for name, seg in first_segments.items():
-        features = extract_features(seg["signal"])
+        feats = features(seg["signal"])
 
-        midi_vectors[name] = features
+        midi_vectors[name] = feats
 
     return midi_vectors
 
@@ -195,14 +202,16 @@ def create_midi(name, params, notes, filename):
 
 def midi(segments):
 
+    print("Generating MIDI tracks from EEG features...")
+
     midi_vectors = generate_midi_vectors(segments)
 
-    print("\nGenerated MIDI feature vectors:")
+    print("\nMIDI feature vectors:")
     print(midi_vectors)
 
     print("\nMapping features to musical parameters and generating MIDI files...")
     for label, fv in midi_vectors.items():
-        print(f"\n[{label}]")
+        print(f"\nLabel: {label}")
         params = features_to_musical_params(fv)
         
         print(f"  Tempo       : {params['tempo']} BPM")
@@ -217,3 +226,4 @@ def midi(segments):
         out_dir.mkdir(parents=True, exist_ok=True)
         filename = out_dir / f"{label}.mid"
         create_midi(label, params, notes, filename)
+
