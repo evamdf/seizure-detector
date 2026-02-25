@@ -7,7 +7,7 @@ The first part of the project is a seizure monitoring/alerting system. It simula
 The second part uses the same feature extraction method to represent one segment from each of the five EEG classes. These features are then mapped to different musical elements, which are in turn used to generate simple songs (MIDI tracks). How each song sounds directly relates to the qualities of different EEG data types. 
 
 
-# Setup & Execution
+## Setup & Execution
 
 Setting up a python venv makes it easy to install requirements:
 
@@ -18,7 +18,7 @@ python3 -m venv venv
 source venv/bin/activate && pip install -r requirements.txt
 ```
 
-## Running the project
+### Running the project
 
 ```bash
 cd src
@@ -40,7 +40,7 @@ An example of the detector output during an ictal EEG signal:
 <img width="397" height="327" alt="detector-example" src="https://github.com/user-attachments/assets/d61ae5a5-684d-4dda-8d82-f28367bc200b" />
 
 
-# Listening to the MIDI files
+## Listening to the MIDI files
 
 To listen to the EEG songs, you can use any sort of media player or web based tool compatible with MIDI. Download the `.mid` files (in `/midi-output`).  
 
@@ -60,7 +60,7 @@ Please note, the files are named according to the EEG class they were made from:
 | F | Intericta - seizure free interval |
 | S | Ictal - during seizure |
 
-# The Data 
+## The Data 
 
 The data in this directory was first analyzed in:
 
@@ -69,9 +69,10 @@ Andrzejak RG, Lehnertz K, Rieke C, Mormann F, David P, Elger CE (2001) Indicatio
 https://www.upf.edu/documents/229517819/232450661/Andrzejak-PhysicalReviewE2001.pdf/0e9a54b8-8993-b400-743e-4d64fa29fb63
 
 
-# TO DOs
+## TO DOs
 
-- Add ability to declare variables in command line 
+- Add ability to declare variables in command line
+- Future: try out replacing sliding window/streaming with Python queue and threading?
 
 
 
