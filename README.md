@@ -46,7 +46,7 @@ To listen to the EEG songs, you can use any sort of media player or web based to
 
 [Midiano](https://app.midiano.com/) is a super easy web app you can use to listen to these. 
 
-Or, you can watch this recording of me playing 2 of the songs in Midiano:
+Or, you can listen to this recording of me playing two of the songs in Midiano:
 
 https://github.com/user-attachments/assets/0f5d1dea-292e-4e84-98a0-7c019664b00b
 
