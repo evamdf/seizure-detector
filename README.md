@@ -37,6 +37,7 @@ python main.py --part stream-demo   # Just do the stream demo (this will create 
 
 An example of the detector output during an ictal EEG signal:
 
+<img width="397" height="327" alt="detector-example" src="https://github.com/user-attachments/assets/d61ae5a5-684d-4dda-8d82-f28367bc200b" />
 
 
 # Listening to the MIDI files
@@ -45,9 +46,9 @@ To listen to the EEG songs, you can use any sort of media player or web based to
 
 [Midiano](https://app.midiano.com/) is a super easy web app you can use to listen to these. 
 
-Or, you can watch this recording of me playing the songs in Midiano:
+Or, you can watch this recording of me playing 2 of the songs in Midiano:
 
-![Video Demo](/midi-demo-vid.mp4)
+https://github.com/user-attachments/assets/0f5d1dea-292e-4e84-98a0-7c019664b00b
 
 Please note, the files are named according to the EEG class they were made from:
 
