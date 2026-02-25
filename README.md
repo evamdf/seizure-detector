@@ -2,7 +2,7 @@
 
 This project experiments using real EEG data that captures brain activity during different states (healthy with eyes open and closed, interictal (in between seizures) and ictal (during seizure)).
 
-The first part of the project is a seizure monitoring/alerting system. It simulates receiving EEG data in real time by moving a sliding window over the signal at a fixed rate. At each window, a set of features are extracted from the signal (normalised band powers, spectral entropy and RMS amplitude) and are fed to a simple classifier to make a prediction about if the EEG indicates a seizure or not. If there are enough consecutive seizure predictions, it will print an alert message. This can be seen in action using the `stream-demo` flag, which shows one non-ictal and one ictal segment being 'streamed'.
+The first part of the project is a seizure monitoring/alerting system. It simulates receiving EEG data in real time by moving a sliding window over the signal at a fixed rate. At each window, a set of features are extracted from the signal (normalised band powers, spectral entropy and RMS amplitude) and are fed to a simple classifier to make a prediction about if a seizure is currently happening. If there are enough consecutive seizure predictions, it will print an alert message. This can be seen in action using the `stream-demo` flag, which shows one non-ictal and one ictal segment being 'streamed'.
 
 The second part uses the same feature extraction method to represent one segment from each of the five EEG classes. These features are then mapped to different musical elements, which are in turn used to generate simple songs (MIDI tracks). How each song sounds directly relates to the qualities of different EEG data types. 
 
