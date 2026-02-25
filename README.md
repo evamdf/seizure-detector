@@ -1,4 +1,4 @@
-# About
+# Seizure Detector, Music Maker 🎵
 
 This project experiments using real EEG data that captures brain activity during different states (healthy with eyes open and closed, interictal (in between seizures) and ictal (during seizure)).
 
