@@ -14,7 +14,7 @@ import argparse
 from loader import loader
 from classifier import classifier
 from streamer import streamer_demo
-from midi.midi import midi
+from midi import midi
 
 def main():
     """
@@ -38,7 +38,7 @@ def main():
 
     if args.part in ("model", "stream-demo", "all"):
 
-        model = classifier(train_segs)
+        model = classifier(train_segs, test_segs)
 
         if args.part in ("stream-demo", "all"):
             streamer_demo(test_segs, model)

@@ -9,8 +9,8 @@ import random
 from pathlib import Path
 from midiutil import MIDIFile
 
-from src.features import features
-from src.variables import SET_LABELS, MIDI_OUTPUT_DIR
+from features import features
+from variables import SET_LABELS, MIDI_OUTPUT_DIR
 
 SET_NAMES = list(SET_LABELS.keys())
 
