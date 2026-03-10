@@ -12,6 +12,7 @@ import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
+from sklearn.metrics import confusion_matrix
 
 from features import features
 from windows import windows
@@ -57,7 +58,28 @@ def load_model():
     with open(MODEL_PATH, "rb") as f:
         return pickle.load(f)
 
-def classifier(train_segs):
+
+def evaluate(model, test_segs):
+    """
+    Evaluate the model on the test segments and report a confusion matrix
+    Evaluation is at window level so might be optimistic!!
+    """
+
+    x_test, y_test = window_features(test_segs)
+
+    y_pred = model.predict(x_test)
+
+    # Confusion matrix
+    tn, fp, fn, tp = confusion_matrix(y_test, y_pred).ravel()
+
+    print("\nConfusion Matrix:")
+    print(f"  True Negatives  (correct non-seizure)  : {tn}")
+    print(f"  False Positives (false alarm)          : {fp}")
+    print(f"  False Negatives (missed seizure)       : {fn}")
+    print(f"  True Positives  (correct seizure)      : {tp}")
+
+
+def classifier(train_segs, test_segs):
     """
     Loads the model if it already exists. If not, trains a new one
     """
@@ -66,4 +88,7 @@ def classifier(train_segs):
         model = load_model()
     else:
         model = train(train_segs)
+
+    evaluate(model, test_segs)
+
     return model
