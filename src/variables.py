@@ -2,7 +2,7 @@
 Contains variables for all modules in one place
 """
 
-SIMULATED_SPEED = 5.0  # How many times faster than real-time to simulate
+SIMULATED_SPEED = 1.0  # How many times faster than real-time to simulate
 WINDOW_SIZE = 173   # 1 second of EEG data at 173.61 Hz
 STEP_SIZE   = 87    # 50% overlap - window moves 0.5 seconds at a time
 SAMPLING_RATE = 173.61 # Hz
