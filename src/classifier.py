@@ -6,12 +6,12 @@ Trains a simple Random Forest classifier.
 - Provides a function to load the model from disk.
 """
 
+from pathlib import Path
+import pickle
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
-from pathlib import Path
-import pickle
 
 from features import features
 from windows import windows
@@ -22,12 +22,12 @@ def window_features(segments):
     """
     Extract features from every window across a list of segments. This is just for training
     """
-    X, y = [], []
+    x, y = [], []
     for segment in segments:
         for window, label in windows(segment):
-            X.append(features(window))
+            x.append(features(window))
             y.append(label)
-    return np.array(X), np.array(y)
+    return np.array(x), np.array(y)
 
 
 def train(train_segs):
@@ -35,14 +35,14 @@ def train(train_segs):
     Train a Random Forest classifier on the training segments. Saves and returns the model
     """
     print("Training classifier...")
-    X_train, y_train = window_features(train_segs)
- 
+    x_train, y_train = window_features(train_segs)
+
     pipeline = Pipeline([
         ("scaler", StandardScaler()),
         ("clf",    RandomForestClassifier(n_estimators=100, n_jobs=-1)),
     ])
 
-    pipeline.fit(X_train, y_train)
+    pipeline.fit(x_train, y_train)
 
     with open(MODEL_PATH, "wb") as f:
         pickle.dump(pipeline, f)
@@ -51,10 +51,16 @@ def train(train_segs):
 
 
 def load_model():
+    """
+    Loads an existing model from pkl file 
+    """
     with open(MODEL_PATH, "rb") as f:
         return pickle.load(f)
 
 def classifier(train_segs):
+    """
+    Loads the model if it already exists. If not, trains a new one
+    """
     if Path(MODEL_PATH).exists():
         print(f"Loading existing model from {MODEL_PATH}...")
         model = load_model()

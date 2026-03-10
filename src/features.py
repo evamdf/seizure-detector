@@ -34,7 +34,7 @@ def features(window: np.ndarray) -> np.ndarray:
     ])
 
     total_power = np.sum(psd) * df
-    
+
     # Normalise band powers to sum to 1 (relative band power)
     powers_norm = powers / (total_power + 1e-12)
 
@@ -42,7 +42,7 @@ def features(window: np.ndarray) -> np.ndarray:
     raw_entropy = float(scipy_entropy(p))
     entropy = raw_entropy / np.log(len(p)) if len(p) > 1 else 0.0
 
-    # root mean square amplitude 
+    # root mean square amplitude
     rms = float(np.sqrt(np.mean(window ** 2)))
 
     return np.array([*powers_norm, entropy, rms], dtype=np.float64)

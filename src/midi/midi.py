@@ -1,14 +1,16 @@
 """
 This module generates MIDI files based on the extracted EEG features. 
-- It maps the features to musical parameters such as tempo, scale, root note, and rhythmic complexity, then creates short melodies that reflect the underlying brain activity patterns.
+- It maps the features to musical parameters such as tempo, scale, root note, 
+    and rhythmic complexity, then creates short melodies that reflect the underlying 
+    brain activity patterns.
 """
 
 import random
 from pathlib import Path
 from midiutil import MIDIFile
 
-from features import features
-from variables import SET_LABELS, MIDI_OUTPUT_DIR
+from src.features import features
+from src.variables import SET_LABELS, MIDI_OUTPUT_DIR
 
 SET_NAMES = list(SET_LABELS.keys())
 
@@ -16,7 +18,9 @@ def generate_midi_vectors(segments):
     """
     Generate MIDI feature vectors for each class based on the first segment seen for that class.
     """
-    # Get the first segment seen for each class (we don't know what name the first files are because they have been split into training and test sets)
+    # Get the first segment seen for each class
+    # (we don't know what name the first files are because they have
+    # been split into training and test sets)
     first_segments = {}
     for seg in segments:
         name = seg["set_name"]
@@ -54,11 +58,15 @@ RMS_MAX = 250.0
 # Feature to musical parameter mapping
 # ---------------------------------------------------------------------------
 def features_to_musical_params(fv):
-    delta, theta, alpha, beta, gamma, entropy, rms = fv
+    """
+    Generates values for a set of musical parameters based on a feature vector
+    """
+    delta, _, _, beta, gamma, entropy, rms = fv
 
-    rms_norm = max(0.0, min(1.0, (rms - RMS_MIN) / (RMS_MAX - RMS_MIN))) # Gotta normalise RMS to a 0-1 range for it to be useful
+    # Gotta normalise RMS to a 0-1 range for it to be useful
+    rms_norm = max(0.0, min(1.0, (rms - RMS_MIN) / (RMS_MAX - RMS_MIN)))
 
-    # Tempo 
+    # Tempo
     # Higher dominance of delta waves (the slowest band) leads to a slower tempo
     delta_inverted = 1.0 - delta  # More delta means slower tempo, so invert it
     tempo = int(45 + (120 - 45) * delta_inverted)
@@ -70,26 +78,26 @@ def features_to_musical_params(fv):
 
     # Scale
     # Dominant delta -> minor
-    # Gamma dominant -> major 
+    # Gamma dominant -> major
     # Otherwise, pentatonic
-    # Kind of a random choice 
+    # Kind of a random choice
     if delta > 0.5:
-        scale_name = "minor"        
+        scale_name = "minor"
     elif gamma > 0.02:
-        scale_name = "major"   
+        scale_name = "major"
     else:
         scale_name = "pentatonic"
     scale = SCALES[scale_name]
 
     # Root / pitch register
-    # More beta/gamma (faster waves) pushes pitch higher 
+    # More beta/gamma (faster waves) pushes pitch higher
     beta_gamma = beta + gamma
     root = int(36 + (66 - 36) * beta_gamma)
 
     # Velocity (loudness)
-    # Higher RMS, louder notes. Higher entropy adds more variance to velocity 
+    # Higher RMS, louder notes. Higher entropy adds more variance to velocity
     base_velocity     = int(35 + rms_norm * 85)  # 35-120
-    velocity_variance = int(entropy * 25)         
+    velocity_variance = int(entropy * 25)
 
     # Pitch repetition
     # Low entropy  -> high repeat probability (loops same pitches).
@@ -103,7 +111,7 @@ def features_to_musical_params(fv):
     rest_probability = max(0.0, min(0.4, rest_probability))
 
     # Pitch jump size
-    # Low entropy -> tiny jumps 
+    # Low entropy -> tiny jumps
     # High entropy -> larger jumps
     max_scale_jump = max(1, int(entropy * len(scale)))
 
@@ -131,7 +139,7 @@ def generate_melody(params, num_bars=4, time_sig=4, seed=123):
     Returns a list of (beat, pitch, duration, velocity) note events.
     """
     random.seed(seed)
-    
+
     scale       = params["scale"]
     root        = params["root"]
     base_dur    = params["base_duration"]
@@ -173,7 +181,7 @@ def generate_melody(params, num_bars=4, time_sig=4, seed=123):
             dur_mult = random.choice([1.0, 1.0, 1.0, 0.5, 2.0])
         else:
             dur_mult = random.choice([0.25, 0.5, 0.5, 1.0, 1.0, 1.5, 2.0])
-        
+
         duration = max(0.1, base_dur * dur_mult)
 
         # Velocity with variance
@@ -191,16 +199,23 @@ def generate_melody(params, num_bars=4, time_sig=4, seed=123):
 # Write MIDI file
 # ---------------------------------------------------------------------------
 def create_midi(name, params, notes, filename):
-    midi = MIDIFile(1)
-    midi.addTempo(0, 0, params["tempo"])
-    midi.addTrackName(0, 0, name)
+    """
+    Create the midi file
+    """
+    mid = MIDIFile(1)
+    mid.addTempo(0, 0, params["tempo"])
+    mid.addTrackName(0, 0, name)
     for (time, pitch, duration, velocity) in notes:
-        midi.addNote(0, 0, pitch, time, duration, velocity)
+        mid.addNote(0, 0, pitch, time, duration, velocity)
     with open(filename, "wb") as f:
-        midi.writeFile(f)
+        mid.writeFile(f)
     print(f"  Saved: {filename}")
 
 def midi(segments):
+    """
+    Accepts EEG segments, maps EEG features to musical qualities and then
+    creates MIDI files using these qualities 
+    """
 
     print("Generating MIDI tracks from EEG features...")
 
@@ -213,17 +228,16 @@ def midi(segments):
     for label, fv in midi_vectors.items():
         print(f"\nLabel: {label}")
         params = features_to_musical_params(fv)
-        
+
         print(f"  Tempo       : {params['tempo']} BPM")
         print(f"  Scale       : {params['scale_name']}")
         print(f"  Root MIDI   : {params['root']}")
         print(f"  Rest prob   : {params['rest_probability']:.2f}")
         print(f"  Pitch jump  : ±{params['max_scale_jump']} scale steps")
 
-        # Generate notes and save to output dir 
+        # Generate notes and save to output dir
         notes = generate_melody(params, num_bars=4)
         out_dir = Path(MIDI_OUTPUT_DIR)
         out_dir.mkdir(parents=True, exist_ok=True)
         filename = out_dir / f"{label}.mid"
         create_midi(label, params, notes, filename)
-

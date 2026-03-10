@@ -1,7 +1,10 @@
 """
 - Simulates real-time EEG streaming for a single segment. (Doesn't actually stream data).
-- Processes windows at the real-world rate and prints a seizure alert when ALERT_THRESHOLD consecutive seizure predictions occur in a row.
-- Has a demo function to randomly stream 1 non-ictal and 1 ictal segment from the test set, showing the model's predictions and probabilities for each window, and when it triggers an alert.
+- Processes windows at the real-world rate and prints a seizure alert when 
+    ALERT_THRESHOLD consecutive seizure predictions occur in a row.
+- Has a demo function to randomly stream 1 non-ictal and 1 ictal segment from the test set, 
+    showing the model's predictions and probabilities for each window, and 
+    when it triggers an alert.
 """
 
 import time
