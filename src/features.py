@@ -22,7 +22,7 @@ def features(window: np.ndarray) -> np.ndarray:
     Extract a feature vector from a single EEG window.
     Features are: normalised band powers (delta, theta, alpha, beta, gamma), spectral entropy, RMS amplitude.
     """
-    # Use Welch's method to estimate the power spectral density 
+    # Use Welch's method to estimate the power spectral density
     freqs, psd = welch(window, fs=SAMPLING_RATE, nperseg=min(len(window), 128))
 
     df = freqs[1] - freqs[0]  # frequency resolution
