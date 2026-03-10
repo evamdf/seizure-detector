@@ -33,7 +33,7 @@ def stream_segment(segment, model):
     for i, (window, _) in enumerate(winds):
         feats = features(window).reshape(1, -1)
         prob       = model.predict_proba(feats)[0][1]   # P(seizure)
-        prediction = int(prob >= 0.8)
+        prediction = int(prob >= 0.6)
 
         if prediction == 1:
             consecutive += 1
